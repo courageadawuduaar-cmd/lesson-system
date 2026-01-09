@@ -89,7 +89,6 @@ def login():
         if user and check_password_hash(user.password, password):
             session['user_id'] = user.id
             session['role'] = user.role
-            session['name'] = user.name
 
             if user.role == 'headmaster':
                 return redirect(url_for('headmaster_dashboard'))
