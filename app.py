@@ -69,9 +69,6 @@ class Lesson(db.Model):
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
 
-with app.app_context():
-        db.create_all()
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -382,27 +379,6 @@ def teacher_view_lesson(lesson_id):
         lesson=lesson
     )
 
-from werkzeug.security import generate_password_hash
-
-with app.app_context():
-    db.create_all()
-
-    admin_email = "admin@example.com"
-    admin_password = "admin123"
-
-    existing_admin = User.query.filter_by(email=admin_email).first()
-    if not existing_admin:
-        admin = User(
-            email=admin_email,
-            password=generate_password_hash(admin_password)
-        )
-        db.session.add(admin)
-        db.session.commit()
-        print("✅ Default admin user created")
-    else:
-        print("ℹ️ Admin user already exists")
-
-
 # --------------------
 # CREATE DATABASE
 # --------------------
@@ -411,3 +387,24 @@ if __name__ == '__main__':
         print("Creating database tables...")
         db.create_all()
     app.run()
+
+
+from werkzeug.security import generate_password_hash
+
+with app.app_context():
+    db.create_all()
+
+    admin_email = "admin@example.com"
+    admin_password = "admin123"
+
+    admin = User.query.filter_by(email=admin_email).first()
+    if not admin:
+        admin = User(
+            email=admin_email,
+            password=generate_password_hash(admin_password)
+        )
+        db.session.add(admin)
+        db.session.commit()
+        print("✅ Admin user created on startup")
+    else:
+        print("ℹ️ Admin user already exists")
