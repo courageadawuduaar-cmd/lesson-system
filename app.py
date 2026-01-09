@@ -5,6 +5,7 @@ from flask import Flask
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, render_template, redirect, url_for, request, session, flash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 import os
@@ -88,7 +89,7 @@ def login():
 
         user = User.query.filter_by(email=email).first()
 
-        if user and user.password == password:
+        if user and check_password_hash(user.password, password):
             session['user_id'] = user.id
             session['role'] = user.role
             session['name'] = user.name
