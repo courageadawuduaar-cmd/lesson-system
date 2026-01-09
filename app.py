@@ -69,20 +69,6 @@ class Lesson(db.Model):
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
 
-from werkzeug.security import generate_password_hash
-
-with app.app_context():
-    db.create_all()
-
-    if not User.query.filter_by(email="admin@example.com").first():
-        admin = User(
-            email="admin@example.com",
-            password=generate_password_hash("admin123")
-        )
-        db.session.add(admin)
-        db.session.commit()
-
-
 with app.app_context():
         db.create_all()
 
@@ -395,6 +381,27 @@ def teacher_view_lesson(lesson_id):
         'teacher_view_lesson.html',
         lesson=lesson
     )
+
+from werkzeug.security import generate_password_hash
+
+with app.app_context():
+    db.create_all()
+
+    admin_email = "admin@example.com"
+    admin_password = "admin123"
+
+    existing_admin = User.query.filter_by(email=admin_email).first()
+    if not existing_admin:
+        admin = User(
+            email=admin_email,
+            password=generate_password_hash(admin_password)
+        )
+        db.session.add(admin)
+        db.session.commit()
+        print("✅ Default admin user created")
+    else:
+        print("ℹ️ Admin user already exists")
+
 
 # --------------------
 # CREATE DATABASE
