@@ -392,7 +392,7 @@ with app.app_context():
     db.create_all()
 
     admin_email = "admin@example.com"
-    admin_password = "admin123"
+    admin_password = "admin1234"
 
     admin = User.query.filter_by(email=admin_email).first()
     if not admin:
